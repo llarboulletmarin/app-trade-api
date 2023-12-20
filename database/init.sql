@@ -26,7 +26,7 @@ CREATE TABLE user (
 INSERT INTO user ( email, password, last_name, first_name, birthdate, sex, street, zip_code, city, country, register_date, last_update_date, fkid_role )
 VALUES (
         'example@example.com',
-        'MTIzNDU2Nzg=',
+        '$2a$10$T707SuTNP3/BU7361Y4NNOhXbWNjn2IVMNCyohEXcMqFynbm9P1xas',
         'Doe',
         'John',
         '1990-01-01',
