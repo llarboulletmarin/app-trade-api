@@ -1,5 +1,6 @@
 package fr.apptrade.backend.api.v1.currency.model.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import fr.apptrade.backend.api.v1.currency.model.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CurrencyResponse {
     private String name;
     private String code;
