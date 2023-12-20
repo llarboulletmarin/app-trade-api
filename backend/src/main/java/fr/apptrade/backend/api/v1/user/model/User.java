@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 
@@ -52,10 +54,12 @@ public class User {
 
   @Column(name = "register_date", nullable = false)
   @Temporal(TemporalType.DATE)
+  @CreationTimestamp
   private Date registerDate;
 
   @Column(name = "last_update_date")
   @Temporal(TemporalType.DATE)
+  @UpdateTimestamp
   private Date lastUpdateDate;
 
   @ManyToOne
