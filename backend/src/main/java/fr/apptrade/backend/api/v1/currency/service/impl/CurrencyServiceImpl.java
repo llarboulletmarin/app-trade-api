@@ -44,29 +44,35 @@ public class CurrencyServiceImpl implements ICurrencyService {
     }
 
     @Override
-    public CandleResponseList getCurrencyHistoryByCode(String code, Integer days) {
+    public CandleResponseList getCurrencyHistoryByCode(String code, Integer days) throws Exception {
         long currentTime = System.currentTimeMillis() / 1000;
         String startTimestamp = String.valueOf(currentTime - days * 24 * 60 * 60);
 
-        ResponseEntity<List<List<Object>>> response = restTemplate.exchange(
-                "https://api.pro.coinbase.com/products/" + code + "-EUR/candles?start=" + startTimestamp + "&end=" + currentTime + "&granularity=3600",
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {
-                }
-        );
+        try {
 
-        List<List<Object>> rawData = response.getBody();
-        if (rawData == null) {
-            return null;
+            ResponseEntity<List<List<Object>>> response = restTemplate.exchange(
+                    "https://api.pro.coinbase.com/products/" + code + "-EUR/candles?start=" + startTimestamp + "&end=" + currentTime + "&granularity=3600",
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<>() {
+                    }
+            );
+
+            List<List<Object>> rawData = response.getBody();
+            if (rawData == null) {
+                return null;
+            }
+
+            List<CandleResponse> candleResponseList = rawData.stream()
+                    .map(Candle::new)
+                    .map(CandleResponse::new)
+                    .toList();
+
+            return new CandleResponseList(candleResponseList);
+
+        } catch (Exception e) {
+            throw new Exception("Currency with code " + code + " not found");
         }
-
-        List<CandleResponse> candleResponseList = rawData.stream()
-                .map(Candle::new)
-                .map(CandleResponse::new)
-                .toList();
-
-        return new CandleResponseList(candleResponseList);
     }
 
 

@@ -28,6 +28,6 @@ public interface ICurrencyService {
      * @param days : nombre de jours à remonter
      * @return l'historique de la devise
      */
-    CandleResponseList getCurrencyHistoryByCode(String code, Integer days);
+    CandleResponseList getCurrencyHistoryByCode(String code, Integer days) throws Exception;
 
 }

@@ -1,11 +1,16 @@
 package fr.apptrade.backend.api.v1.currency.controller;
 
+import fr.apptrade.backend.api.v1.config.model.ApiResponse;
+import fr.apptrade.backend.api.v1.currency.model.Currency;
 import fr.apptrade.backend.api.v1.currency.service.ICurrencyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.Instant;
+import java.util.List;
 
 @RestController
 @RequestMapping("${api.base-url.v1}/currencies")
@@ -39,7 +44,13 @@ public class CurrencyController {
     @GetMapping("/{code}")
     public ResponseEntity<?> getCurrencyByCode(@PathVariable String code) {
         logger.info("getCurrencyById()");
-        return ResponseEntity.ok(this.currencyService.getCurrencyByCode(code));
+
+        List<Currency> currencies = this.currencyService.getCurrencyByCode(code);
+        if (currencies.isEmpty()) {
+            return ResponseEntity.badRequest().body(new ApiResponse("Error while getting currency", 404, "Currency with code " + code + " not found", null, Instant.now()));
+        }
+
+        return ResponseEntity.ok(currencies);
     }
 
     /**
@@ -54,10 +65,15 @@ public class CurrencyController {
                                                       @RequestParam(required = false) Integer days) {
         logger.info("getCurrencyHistoryByCode()");
 
-        if (days == null) {
-            days = 7;
-        }
+        try {
+            if (days == null) {
+                days = 7;
+            }
 
-        return ResponseEntity.ok(this.currencyService.getCurrencyHistoryByCode(code, days));
+            return ResponseEntity.ok(this.currencyService.getCurrencyHistoryByCode(code, days));
+        } catch (Exception e) {
+            logger.error("Error while getting currency history", e);
+            return ResponseEntity.badRequest().body(new ApiResponse("Error while getting currency history", 404, e.getMessage(), null, Instant.now()));
+        }
     }
 }
