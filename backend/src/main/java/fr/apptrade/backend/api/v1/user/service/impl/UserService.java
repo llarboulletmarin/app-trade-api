@@ -8,12 +8,10 @@ import fr.apptrade.backend.api.v1.user.model.CreditCard;
 import fr.apptrade.backend.api.v1.user.model.Favorite;
 import fr.apptrade.backend.api.v1.user.model.Role;
 import fr.apptrade.backend.api.v1.user.model.User;
+import fr.apptrade.backend.api.v1.user.model.response.TransactionCardResponse;
 import fr.apptrade.backend.api.v1.user.model.response.TransactionResponse;
 import fr.apptrade.backend.api.v1.user.model.response.UserResponse;
-import fr.apptrade.backend.api.v1.user.repository.ICreditCardRepository;
-import fr.apptrade.backend.api.v1.user.repository.IFavoriteRepository;
-import fr.apptrade.backend.api.v1.user.repository.ITransactionRepository;
-import fr.apptrade.backend.api.v1.user.repository.IUserRepository;
+import fr.apptrade.backend.api.v1.user.repository.*;
 import fr.apptrade.backend.api.v1.user.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,6 +26,7 @@ public class UserService implements IUserService {
     private final IUserRepository userRepository;
     private final ICreditCardRepository creditCardRepository;
     private final ITransactionRepository transactionRepository;
+    private final ITransactionCardRepository transactionCardRepository;
     private final IFavoriteRepository favoriteRepository;
     private final ICurrencyRepository currencyRepository;
     private final WebSecurityConfig webSecurityConfig;
@@ -36,12 +35,14 @@ public class UserService implements IUserService {
     public UserService(IUserRepository userRepository,
                        ICreditCardRepository creditCardRepository,
                        ITransactionRepository transactionRepository,
+                       ITransactionCardRepository transactionCardRepository,
                        IFavoriteRepository favoriteRepository,
                        ICurrencyRepository currencyRepository,
                        WebSecurityConfig webSecurityConfig) {
         this.userRepository = userRepository;
         this.creditCardRepository = creditCardRepository;
         this.transactionRepository = transactionRepository;
+        this.transactionCardRepository = transactionCardRepository;
         this.favoriteRepository = favoriteRepository;
         this.currencyRepository = currencyRepository;
         this.webSecurityConfig = webSecurityConfig;
@@ -100,6 +101,24 @@ public class UserService implements IUserService {
         return this.transactionRepository.findAllByFkidUserAndCurrencyCode(user.getId(), code)
                 .stream()
                 .map(TransactionResponse::new)
+                .toList();
+    }
+
+    @Override
+    public List<TransactionCardResponse> getTransactionsCard(String email) {
+        User user = this.userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email + " not found"));
+        return this.transactionCardRepository.findAllByFkidUser(user.getId())
+                .stream()
+                .map(TransactionCardResponse::new)
+                .toList();
+    }
+
+    @Override
+    public List<TransactionCardResponse> getTransactionsCardByCardNumber(String email, String cardNumber) {
+        User user = this.userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email + " not found"));
+        return this.transactionCardRepository.findAllByFkidUserAndCreditCardCardNumber(user.getId(), cardNumber)
+                .stream()
+                .map(TransactionCardResponse::new)
                 .toList();
     }
 

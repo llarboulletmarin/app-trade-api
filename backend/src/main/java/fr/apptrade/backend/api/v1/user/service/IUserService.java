@@ -3,6 +3,7 @@ package fr.apptrade.backend.api.v1.user.service;
 import fr.apptrade.backend.api.v1.currency.model.response.CurrencyResponse;
 import fr.apptrade.backend.api.v1.user.model.CreditCard;
 import fr.apptrade.backend.api.v1.user.model.User;
+import fr.apptrade.backend.api.v1.user.model.response.TransactionCardResponse;
 import fr.apptrade.backend.api.v1.user.model.response.TransactionResponse;
 import fr.apptrade.backend.api.v1.user.model.response.UserResponse;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -62,6 +63,23 @@ public interface IUserService {
     List<TransactionResponse> getTransactionsByCode(String email, String code);
 
     /**
+     * Récupération des transactions de carte de crédit d'un utilisateur
+     *
+     * @param email : email de l'utilisateur
+     * @return : transactions de carte de crédit
+     */
+    List<TransactionCardResponse> getTransactionsCard(String email);
+
+    /**
+     * Récupération des transactions de carte de crédit d'un utilisateur pour une carte de crédit
+     *
+     * @param email : email de l'utilisateur
+     * @param cardNumber : numéro de la carte de crédit
+     * @return : transactions de carte de crédit
+     */
+    List<TransactionCardResponse> getTransactionsCardByCardNumber(String email, String cardNumber);
+
+    /**
      * Récupération des favoris d'un utilisateur
      *
      * @param email : email de l'utilisateur
@@ -85,4 +103,5 @@ public interface IUserService {
      * @param code  : code de la devise
      */
     void deleteFavorite(String email, String code) throws Exception;
+
 }

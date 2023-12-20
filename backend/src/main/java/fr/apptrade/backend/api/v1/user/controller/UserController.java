@@ -156,6 +156,43 @@ public class UserController {
     }
 
     /**
+     * Endpoint de récupération des transactions de carte de crédit de l'utilisateur
+     *
+     * @param email : email de l'utilisateur connecté
+     * @return : transactions de carte de crédit de l'utilisateur
+     */
+    @GetMapping("/card-transactions")
+    public ResponseEntity<?> getTransactionsCard(@CurrentSecurityContext(expression = "authentication.name") String email) {
+        logger.info("getTransactionsCard({})", email);
+
+        try {
+            return ResponseEntity.ok(this.userService.getTransactionsCard(email));
+        } catch (Exception e) {
+            logger.error("getTransactionsCard()", e);
+            return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), 400, "Bad Request", e.getLocalizedMessage(), Instant.now()));
+        }
+    }
+
+    /**
+     * Endpoint de récupération des transactions de carte de crédit de l'utilisateur pour une carte de crédit
+     *
+     * @param email : email de l'utilisateur connecté
+     * @return : transactions de carte de crédit de l'utilisateur
+     */
+    @GetMapping("/card-transactions/{cardNumber}")
+    public ResponseEntity<?> getTransactionsCard(@PathVariable String cardNumber,
+                                                 @CurrentSecurityContext(expression = "authentication.name") String email) {
+        logger.info("getTransactionsCard({}, {})", email, cardNumber);
+
+        try {
+            return ResponseEntity.ok(this.userService.getTransactionsCardByCardNumber(email, cardNumber));
+        } catch (Exception e) {
+            logger.error("getTransactionsCard()", e);
+            return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), 400, "Bad Request", e.getLocalizedMessage(), Instant.now()));
+        }
+    }
+
+    /**
      * Endpoint de récupération des favoris de l'utilisateur
      *
      * @param email : email de l'utilisateur connecté
