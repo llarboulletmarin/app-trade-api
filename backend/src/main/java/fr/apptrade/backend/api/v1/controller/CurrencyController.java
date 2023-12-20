@@ -1,6 +1,6 @@
-package fr.apptrade.backend.api.controller;
+package fr.apptrade.backend.api.v1.controller;
 
-import fr.apptrade.backend.api.service.ICurrencyService;
+import fr.apptrade.backend.api.v1.service.ICurrencyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/currency")
+@RequestMapping("${api.base-url.v1}/currency")
 public class CurrencyController {
 
     private static final Logger logger = LoggerFactory.getLogger(CurrencyController.class);

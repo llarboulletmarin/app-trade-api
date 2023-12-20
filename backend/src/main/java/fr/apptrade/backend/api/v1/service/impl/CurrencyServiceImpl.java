@@ -1,8 +1,8 @@
-package fr.apptrade.backend.api.service.impl;
+package fr.apptrade.backend.api.v1.service.impl;
 
-import fr.apptrade.backend.api.model.Currency;
-import fr.apptrade.backend.api.repository.ICurrencyRepository;
-import fr.apptrade.backend.api.service.ICurrencyService;
+import fr.apptrade.backend.api.v1.model.Currency;
+import fr.apptrade.backend.api.v1.repository.ICurrencyRepository;
+import fr.apptrade.backend.api.v1.service.ICurrencyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

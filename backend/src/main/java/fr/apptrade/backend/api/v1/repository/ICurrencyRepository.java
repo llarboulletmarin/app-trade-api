@@ -1,6 +1,6 @@
-package fr.apptrade.backend.api.repository;
+package fr.apptrade.backend.api.v1.repository;
 
-import fr.apptrade.backend.api.model.Currency;
+import fr.apptrade.backend.api.v1.model.Currency;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
