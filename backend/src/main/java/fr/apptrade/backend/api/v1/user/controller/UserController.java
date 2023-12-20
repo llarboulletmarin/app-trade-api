@@ -63,10 +63,6 @@ public class UserController {
         logger.info("login({})", email);
 
         try {
-            if (email == null || email.isEmpty()) {
-                return ResponseEntity.badRequest().body(new ApiResponse("Email are required", 400, "Bad Request", "Email are required", Instant.now()));
-            }
-
             return ResponseEntity.ok(this.userService.getUserByEmail(email));
         } catch (Exception e) {
             logger.error("login()", e);
@@ -133,10 +129,6 @@ public class UserController {
         logger.info("getTransactions({})", email);
 
         try {
-            if (email == null || email.isEmpty()) {
-                return ResponseEntity.badRequest().body(new ApiResponse("Email are required", 400, "Bad Request", "Email are required", Instant.now()));
-            }
-
             return ResponseEntity.ok(this.userService.getTransactions(email));
         } catch (Exception e) {
             logger.error("getTransactions()", e);
@@ -156,16 +148,81 @@ public class UserController {
         logger.info("getTransactions({}, {})", email, currencyCode);
 
         try {
-            if (email == null || email.isEmpty()) {
-                return ResponseEntity.badRequest().body(new ApiResponse("Email are required", 400, "Bad Request", "Email are required", Instant.now()));
-            }
-
             return ResponseEntity.ok(this.userService.getTransactionsByCode(email, currencyCode));
         } catch (Exception e) {
             logger.error("getTransactions()", e);
             return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), 400, "Bad Request", e.getLocalizedMessage(), Instant.now()));
         }
     }
+
+    /**
+     * Endpoint de récupération des favoris de l'utilisateur
+     *
+     * @param email : email de l'utilisateur connecté
+     * @return : favoris de l'utilisateur
+     */
+    @GetMapping("/favorites")
+    public ResponseEntity<?> getFavorites(@CurrentSecurityContext(expression = "authentication.name") String email) {
+        logger.info("getFavorites({})", email);
+
+        try {
+            return ResponseEntity.ok(this.userService.getFavorites(email));
+        } catch (Exception e) {
+            logger.error("getFavorites()", e);
+            return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), 400, "Bad Request", e.getLocalizedMessage(), Instant.now()));
+        }
+    }
+
+    /**
+     * Permet d'ajouter un nouveau favoris
+     *
+     * @param email        : email de l'utilisateur connecté
+     * @param currencyCode : code de la devise
+     * @return : favoris de l'utilisateur
+     */
+    @PostMapping("/favorites/{currencyCode}")
+    public ResponseEntity<?> addFavorite(@PathVariable String currencyCode,
+                                         @CurrentSecurityContext(expression = "authentication.name") String email) {
+        logger.info("addFavorite({}, {})", email, currencyCode);
+
+        try {
+            if (currencyCode == null || currencyCode.isEmpty()) {
+                return ResponseEntity.badRequest().body(new ApiResponse("Currency code are required", 400, "Bad Request", "Currency code are required", Instant.now()));
+            }
+
+            return ResponseEntity.ok(this.userService.addFavorite(email, currencyCode));
+        } catch (Exception e) {
+            logger.error("addFavorite()", e);
+            return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), 400, "Bad Request", e.getLocalizedMessage(), Instant.now()));
+        }
+    }
+
+    /**
+     * Permet de retirer un favoris
+     *
+     * @param email        : email de l'utilisateur connecté
+     * @param currencyCode : code de la devise
+     * @return : ok ou erreur
+     */
+    @DeleteMapping("/favorites/{currencyCode}")
+    public ResponseEntity<?> deleteFavorite(@PathVariable String currencyCode,
+                                            @CurrentSecurityContext(expression = "authentication.name") String email) {
+        logger.info("deleteFavorite({}, {})", email, currencyCode);
+
+        try {
+            if (currencyCode == null || currencyCode.isEmpty()) {
+                return ResponseEntity.badRequest().body(new ApiResponse("Currency code are required", 400, "Bad Request", "Currency code are required", Instant.now()));
+            }
+
+            this.userService.deleteFavorite(email, currencyCode);
+
+            return ResponseEntity.ok(new ApiResponse("Favorite deleted", 200, null, null, Instant.now()));
+        } catch (Exception e) {
+            logger.error("deleteFavorite()", e);
+            return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), 400, "Bad Request", e.getLocalizedMessage(), Instant.now()));
+        }
+    }
+
 
     /**
      * Vérifie que les informations de l'utilisateur sont correctes
