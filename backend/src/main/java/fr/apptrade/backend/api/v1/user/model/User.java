@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,54 +17,62 @@ import java.util.Date;
 @Table(name = "user")
 public class User {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", nullable = false)
-  private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
-  @Column(name = "email", nullable = false, unique = true)
-  private String email;
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
-  @Column(name = "password", nullable = false)
-  private String password;
+    @Column(name = "password", nullable = false)
+    private String password;
 
-  @Column(name = "last_name", nullable = false, length = 30)
-  private String lastName;
+    @Column(name = "last_name", nullable = false, length = 30)
+    private String lastName;
 
-  @Column(name = "first_name", nullable = false, length = 30)
-  private String firstName;
+    @Column(name = "first_name", nullable = false, length = 30)
+    private String firstName;
 
-  @Column(name = "birthdate", nullable = false)
-  @Temporal(TemporalType.DATE)
-  private Date birthdate;
+    @Column(name = "birthdate", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date birthdate;
 
-  @Column(name = "sex", nullable = false, length = 1)
-  private String sex;
+    @Column(name = "sex", nullable = false, length = 1)
+    private String sex;
 
-  @Column(name = "street", nullable = false)
-  private String street;
+    @Column(name = "street", nullable = false)
+    private String street;
 
-  @Column(name = "zip_code", nullable = false, length = 30)
-  private String zipCode;
+    @Column(name = "zip_code", nullable = false, length = 30)
+    private String zipCode;
 
-  @Column(name = "city", nullable = false, length = 30)
-  private String city;
+    @Column(name = "city", nullable = false, length = 30)
+    private String city;
 
-  @Column(name = "country", nullable = false, length = 30)
-  private String country;
+    @Column(name = "country", nullable = false, length = 30)
+    private String country;
 
-  @Column(name = "register_date", nullable = false)
-  @Temporal(TemporalType.DATE)
-  @CreationTimestamp
-  private Date registerDate;
+    @Column(name = "register_date", nullable = false)
+    @Temporal(TemporalType.DATE)
+    @CreationTimestamp
+    private Date registerDate;
 
-  @Column(name = "last_update_date")
-  @Temporal(TemporalType.DATE)
-  @UpdateTimestamp
-  private Date lastUpdateDate;
+    @Column(name = "last_update_date")
+    @Temporal(TemporalType.DATE)
+    @UpdateTimestamp
+    private Date lastUpdateDate;
 
-  @ManyToOne
-  @JoinColumn(name = "fkid_role", referencedColumnName = "id")
-  private Role role;
+    @ManyToOne
+    @JoinColumn(name = "fkid_role", referencedColumnName = "id")
+    private Role role;
+
+    @ManyToMany
+    @JoinTable(
+            name = "credit_card",
+            joinColumns = @JoinColumn(name = "fkid_user", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "id", referencedColumnName = "id")
+    )
+    private List<CreditCard> creditCards;
 
 }

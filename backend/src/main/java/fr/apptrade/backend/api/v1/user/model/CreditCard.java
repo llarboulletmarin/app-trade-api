@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -16,11 +18,20 @@ public class CreditCard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "num_card", length = 30)
-    private String numCard;
+    @Column(name = "card_holder")
+    private String cardHolder;
 
-    @ManyToOne
-    @JoinColumn(name = "fkid_user", referencedColumnName = "id")
-    private User user;
+    @Column(name = "card_number", length = 16)
+    private String cardNumber;
+
+    @Column(name = "card_cvc", length = 3)
+    private String cardCvc;
+
+    @Column(name = "card_expiration_date")
+    @Temporal(TemporalType.DATE)
+    private Date cardExpirationDate;
+
+    @Column(name = "fkid_user")
+    private Integer fkidUser;
 
 }

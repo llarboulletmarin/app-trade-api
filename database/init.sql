@@ -26,7 +26,7 @@ CREATE TABLE user (
 INSERT INTO user ( email, password, last_name, first_name, birthdate, sex, street, zip_code, city, country, register_date, last_update_date, fkid_role )
 VALUES (
         'example@example.com',
-        '$2a$10$T707SuTNP3/BU7361Y4NNOhXbWNjn2IVMNCyohEXcMqFynbm9P1xas',
+        '$2a$10$Ul9LL06mFRwwl8.6ZYhzHupc57gBPSuZqxOWzyjKzm.tWi2QV8bUe',
         'Doe',
         'John',
         '1990-01-01',
@@ -67,14 +67,18 @@ VALUES
 
 CREATE TABLE credit_card (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    num_card VARCHAR(30),
     fkid_user INT,
+    card_holder          VARCHAR(255) NOT NULL,
+    card_number          VARCHAR(16),
+    card_cvc             VARCHAR(3),
+    card_expiration_date DATE,
     CONSTRAINT fk_user_credit_card FOREIGN KEY (fkid_user) REFERENCES user(id)
 );
-INSERT INTO credit_card (num_card, fkid_user)
-VALUES
-    ('1234567890123456', (SELECT id FROM user WHERE email = 'example@example.com')),
-    ('1234567890123457', (SELECT id FROM user WHERE email = 'example@example.com'))
+INSERT INTO credit_card (fkid_user, card_holder, card_number, card_cvc, card_expiration_date)
+VALUES ((SELECT id FROM user WHERE email = 'example@example.com'), 'Doe John Mom', '1234567890123456', '711',
+        '2025-01-01'),
+       ((SELECT id FROM user WHERE email = 'example@example.com'), 'Doe John Dad', '1234567891834189', '444',
+        '2024-07-24')
 ;
 
 CREATE TABLE favorite (

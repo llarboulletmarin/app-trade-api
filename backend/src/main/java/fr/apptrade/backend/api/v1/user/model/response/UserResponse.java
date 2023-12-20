@@ -1,11 +1,13 @@
 package fr.apptrade.backend.api.v1.user.model.response;
 
+import fr.apptrade.backend.api.v1.user.model.CreditCard;
 import fr.apptrade.backend.api.v1.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -22,6 +24,7 @@ public class UserResponse {
     private String zipCode;
     private String city;
     private String country;
+    private List<CreditCard> creditCards;
     private Date registerDate;
     private Date lastUpdateDate;
 
@@ -36,6 +39,7 @@ public class UserResponse {
         this.zipCode = user.getZipCode();
         this.city = user.getCity();
         this.country = user.getCountry();
+        this.creditCards = user.getCreditCards();
         this.registerDate = user.getRegisterDate();
         this.lastUpdateDate = user.getLastUpdateDate();
     }
