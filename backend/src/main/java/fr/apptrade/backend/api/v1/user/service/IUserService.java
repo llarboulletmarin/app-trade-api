@@ -2,8 +2,11 @@ package fr.apptrade.backend.api.v1.user.service;
 
 import fr.apptrade.backend.api.v1.user.model.CreditCard;
 import fr.apptrade.backend.api.v1.user.model.User;
+import fr.apptrade.backend.api.v1.user.model.response.TransactionResponse;
 import fr.apptrade.backend.api.v1.user.model.response.UserResponse;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import java.util.List;
 
 public interface IUserService {
 
@@ -39,4 +42,20 @@ public interface IUserService {
      * @throws Exception : erreur
      */
     void deleteCreditCard(int id, String email) throws Exception;
+
+    /**
+     * Récupération des transactions d'un utilisateur
+     *
+     * @param email : email de l'utilisateur
+     * @return : transactions
+     */
+    List<TransactionResponse> getTransactions(String email);
+
+    /**
+     * Récupération des transactions d'un utilisateur pour une devise
+     *
+     * @param email : email de l'utilisateur
+     * @return : transactions
+     */
+    List<TransactionResponse> getTransactionsByCode(String email, String code);
 }

@@ -1,9 +1,9 @@
 package fr.apptrade.backend.api.v1.currency.service.impl;
 
-import fr.apptrade.backend.api.v1.currency.model.Currency;
 import fr.apptrade.backend.api.v1.currency.model.candle.Candle;
 import fr.apptrade.backend.api.v1.currency.model.candle.CandleResponse;
 import fr.apptrade.backend.api.v1.currency.model.candle.CandleResponseList;
+import fr.apptrade.backend.api.v1.currency.model.response.CurrencyResponse;
 import fr.apptrade.backend.api.v1.currency.repository.ICurrencyRepository;
 import fr.apptrade.backend.api.v1.currency.service.ICurrencyService;
 import org.slf4j.Logger;
@@ -32,15 +32,21 @@ public class CurrencyServiceImpl implements ICurrencyService {
     }
 
     @Override
-    public List<Currency> getCurrencies() {
+    public List<CurrencyResponse> getCurrencies() {
         logger.debug("getCurrency()");
-        return this.currencyRepository.findAll();
+        return this.currencyRepository.findAll()
+                .stream()
+                .map(CurrencyResponse::new)
+                .toList();
     }
 
     @Override
-    public List<Currency> getCurrencyByCode(String code) {
+    public List<CurrencyResponse> getCurrencyByCode(String code) {
         logger.debug("getCurrencyByCode({})", code);
-        return this.currencyRepository.findByCode(code);
+        return this.currencyRepository.findByCode(code)
+                .stream()
+                .map(CurrencyResponse::new)
+                .toList();
     }
 
     @Override

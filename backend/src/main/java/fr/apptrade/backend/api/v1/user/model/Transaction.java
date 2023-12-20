@@ -1,7 +1,6 @@
-package fr.apptrade.backend.api.v1.transaction.model;
+package fr.apptrade.backend.api.v1.user.model;
 
 import fr.apptrade.backend.api.v1.currency.model.Currency;
-import fr.apptrade.backend.api.v1.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,9 +23,11 @@ public class Transaction {
     @JoinColumn(name = "fkid_currency", referencedColumnName = "id")
     private Currency currency;
 
-    @ManyToOne
-    @JoinColumn(name = "fkid_user", referencedColumnName = "id")
-    private User user;
+    //    @ManyToOne
+//    @JoinColumn(name = "fkid_user", referencedColumnName = "id")
+//    private User user;
+    @Column(name = "fkid_user", nullable = false)
+    private Integer fkidUser;
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;

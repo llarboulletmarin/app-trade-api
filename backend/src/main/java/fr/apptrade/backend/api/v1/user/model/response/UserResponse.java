@@ -14,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 public class UserResponse {
 
-    private Integer id;
     private String email;
     private String lastName;
     private String firstName;
@@ -29,7 +28,6 @@ public class UserResponse {
     private Date lastUpdateDate;
 
     public UserResponse(User user) {
-        this.id = user.getId();
         this.email = user.getEmail();
         this.lastName = user.getLastName();
         this.firstName = user.getFirstName();

@@ -123,6 +123,51 @@ public class UserController {
     }
 
     /**
+     * Endpoint de récupération des transactions de l'utilisateur
+     *
+     * @param email : email de l'utilisateur connecté
+     * @return : transactions de l'utilisateur
+     */
+    @GetMapping("/transactions")
+    public ResponseEntity<?> getTransactions(@CurrentSecurityContext(expression = "authentication.name") String email) {
+        logger.info("getTransactions({})", email);
+
+        try {
+            if (email == null || email.isEmpty()) {
+                return ResponseEntity.badRequest().body(new ApiResponse("Email are required", 400, "Bad Request", "Email are required", Instant.now()));
+            }
+
+            return ResponseEntity.ok(this.userService.getTransactions(email));
+        } catch (Exception e) {
+            logger.error("getTransactions()", e);
+            return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), 400, "Bad Request", e.getLocalizedMessage(), Instant.now()));
+        }
+    }
+
+    /**
+     * Endpoint de récupération des transactions de l'utilisateur pour une devise
+     *
+     * @param email : email de l'utilisateur connecté
+     * @return : transactions de l'utilisateur
+     */
+    @GetMapping("/transactions/{currencyCode}")
+    public ResponseEntity<?> getTransactions(@PathVariable String currencyCode,
+                                             @CurrentSecurityContext(expression = "authentication.name") String email) {
+        logger.info("getTransactions({}, {})", email, currencyCode);
+
+        try {
+            if (email == null || email.isEmpty()) {
+                return ResponseEntity.badRequest().body(new ApiResponse("Email are required", 400, "Bad Request", "Email are required", Instant.now()));
+            }
+
+            return ResponseEntity.ok(this.userService.getTransactionsByCode(email, currencyCode));
+        } catch (Exception e) {
+            logger.error("getTransactions()", e);
+            return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), 400, "Bad Request", e.getLocalizedMessage(), Instant.now()));
+        }
+    }
+
+    /**
      * Vérifie que les informations de l'utilisateur sont correctes
      *
      * @param user : utilisateur
