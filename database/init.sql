@@ -18,12 +18,13 @@ CREATE TABLE user (
     zip_code VARCHAR(30) NOT NULL,
     city VARCHAR(30) NOT NULL,
     country VARCHAR(30) NOT NULL,
+    balance DECIMAL(18,9) NOT NULL DEFAULT 0,
     register_date DATE NOT NULL,
     last_update_date DATE,
     fkid_role INT,
     CONSTRAINT fk_role_user FOREIGN KEY (fkid_role) REFERENCES role(id)
 );
-INSERT INTO user ( email, password, last_name, first_name, birthdate, sex, street, zip_code, city, country, register_date, last_update_date, fkid_role )
+INSERT INTO user ( email, password, last_name, first_name, birthdate, sex, street, zip_code, city, country, balance, register_date, last_update_date, fkid_role )
 VALUES (
         'example@example.com',
         '$2a$10$Ul9LL06mFRwwl8.6ZYhzHupc57gBPSuZqxOWzyjKzm.tWi2QV8bUe',
@@ -35,6 +36,7 @@ VALUES (
         '12345',
         'Bitville',
         'Cryptoland',
+        1000000,
         CURDATE(),
         CURDATE(),
         (SELECT id FROM role WHERE role = 'user')
@@ -92,3 +94,19 @@ INSERT INTO favorite (fkid_currency, fkid_user)
 VALUES
     ((SELECT id FROM currency WHERE code = 'BTC'), (SELECT id FROM user WHERE email = 'example@example.com')),
     ((SELECT id FROM currency WHERE code = 'ETH'), (SELECT id FROM user WHERE email = 'example@example.com'));
+
+CREATE TABLE transac_card (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    amount DECIMAL(18, 2) NOT NULL,
+    transaction_date DATE NOT NULL,
+    fkid_credit_card INT,
+    fkid_user INT,
+    CONSTRAINT fk_user_card_transactions FOREIGN KEY (fkid_user) REFERENCES user(id),
+    CONSTRAINT fk_credit_card_transactions FOREIGN KEY (fkid_credit_card) REFERENCES credit_card(id)
+);
+INSERT INTO transac_card (fkid_credit_card, fkid_user, amount, transaction_date)
+VALUES
+    ((SELECT id FROM credit_card WHERE card_number = '1234567890123456'), (SELECT id FROM user WHERE email = 'example@example.com'), 1000, CURDATE()),
+    ((SELECT id FROM credit_card WHERE card_number = '1234567890123456'), (SELECT id FROM user WHERE email = 'example@example.com'), -600, CURDATE()),
+    ((SELECT id FROM credit_card WHERE card_number = '1234567891834189'), (SELECT id FROM user WHERE email = 'example@example.com'), 10000, CURDATE()),
+    ((SELECT id FROM credit_card WHERE card_number = '1234567891834189'), (SELECT id FROM user WHERE email = 'example@example.com'), -700, CURDATE())
