@@ -1,4 +1,4 @@
-package fr.apptrade.backend.api.v1.model;
+package fr.apptrade.backend.api.v1.user.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,16 +9,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "favorite")
-public class Favorite {
+@Table(name = "credit_card")
+public class CreditCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "fkid_currency", referencedColumnName = "id")
-    private Currency currency;
+    @Column(name = "num_card", length = 30)
+    private String numCard;
 
     @ManyToOne
     @JoinColumn(name = "fkid_user", referencedColumnName = "id")

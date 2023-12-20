@@ -1,6 +1,6 @@
-package fr.apptrade.backend.api.v1.service;
+package fr.apptrade.backend.api.v1.currency.service;
 
-import fr.apptrade.backend.api.v1.model.Currency;
+import fr.apptrade.backend.api.v1.currency.model.Currency;
 
 import java.util.List;
 

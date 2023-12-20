@@ -1,4 +1,4 @@
-package fr.apptrade.backend.api.v1.model;
+package fr.apptrade.backend.api.v1.user.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,7 @@
-package fr.apptrade.backend.api.v1.model;
+package fr.apptrade.backend.api.v1.transaction.model;
 
+import fr.apptrade.backend.api.v1.currency.model.Currency;
+import fr.apptrade.backend.api.v1.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
