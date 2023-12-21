@@ -27,6 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     /**
      * Permet à Spring de récupérer un utilisateur par son email lors de l'authentification
+     *
      * @param email email de l'utilisateur
      * @return UserDetails
      * @throws UsernameNotFoundException si l'utilisateur n'est pas trouvé
@@ -46,6 +47,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     /**
      * Permet de récupérer le rôle de l'utilisateur
+     *
      * @param role rôle de l'utilisateur (objet Role)
      * @return Collection<? extends GrantedAuthority>
      */

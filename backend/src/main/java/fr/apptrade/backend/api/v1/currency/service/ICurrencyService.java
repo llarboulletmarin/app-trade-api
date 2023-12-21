@@ -1,5 +1,6 @@
 package fr.apptrade.backend.api.v1.currency.service;
 
+import fr.apptrade.backend.api.v1.currency.model.Currency;
 import fr.apptrade.backend.api.v1.currency.model.candle.CandleResponseList;
 import fr.apptrade.backend.api.v1.currency.model.response.CurrencyResponse;
 
@@ -15,11 +16,20 @@ public interface ICurrencyService {
     List<CurrencyResponse> getCurrencies();
 
     /**
-     * Retourne une devise par son code
+     * Retourne des devises par leurs codes
+     *
+     * @param code : code de la devise
+     * @return la liste des devises
+     */
+    List<CurrencyResponse> getCurrencyByCode(String code);
+
+    /**
+     * Retourne lune devise par son code
+     *
      * @param code : code de la devise
      * @return la devise
      */
-    List<CurrencyResponse> getCurrencyByCode(String code);
+    Currency findCurrencyByCode(String code);
 
     /**
      * Retourne l'historique de prix d'une devise sur une période

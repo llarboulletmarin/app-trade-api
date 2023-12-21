@@ -57,7 +57,7 @@ public class CurrencyController {
      * Endpoint de récupération de l'historique d'une devise par son code
      *
      * @param currencyCode : code de la devise
-     * @param days : nombre de jours à récupérer
+     * @param days         : nombre de jours à récupérer
      * @return l'historique de la devise
      */
     @GetMapping("/{currencyCode}/history")

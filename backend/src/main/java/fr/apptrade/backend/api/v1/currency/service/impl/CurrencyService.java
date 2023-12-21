@@ -1,5 +1,6 @@
 package fr.apptrade.backend.api.v1.currency.service.impl;
 
+import fr.apptrade.backend.api.v1.currency.model.Currency;
 import fr.apptrade.backend.api.v1.currency.model.candle.Candle;
 import fr.apptrade.backend.api.v1.currency.model.candle.CandleResponse;
 import fr.apptrade.backend.api.v1.currency.model.candle.CandleResponseList;
@@ -7,7 +8,6 @@ import fr.apptrade.backend.api.v1.currency.model.response.CoinbasePriceResponse;
 import fr.apptrade.backend.api.v1.currency.model.response.CurrencyResponse;
 import fr.apptrade.backend.api.v1.currency.repository.ICurrencyRepository;
 import fr.apptrade.backend.api.v1.currency.service.ICurrencyService;
-import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,34 +19,21 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Service
-public class CurrencyServiceImpl implements ICurrencyService {
+public class CurrencyService implements ICurrencyService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CurrencyServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(CurrencyService.class);
     private final ICurrencyRepository currencyRepository;
 
     private final RestTemplate restTemplate;
 
     @Autowired
-    public CurrencyServiceImpl(ICurrencyRepository currencyRepository) {
+    public CurrencyService(ICurrencyRepository currencyRepository) {
         this.currencyRepository = currencyRepository;
         this.restTemplate = new RestTemplate();
     }
-
-    private BigDecimal getPriceFromCoinbase(String currencyCode) {
-        try {
-            String url = "https://api.coinbase.com/v2/prices/" + currencyCode + "-EUR/spot";
-            ResponseEntity<CoinbasePriceResponse> response = restTemplate.getForEntity(url, CoinbasePriceResponse.class);
-            return new BigDecimal(Objects.requireNonNull(response.getBody()).getData().getAmount());
-        } catch (Exception e) {
-            logger.error("Erreur lors de la récupération du prix pour la devise " + currencyCode, e);
-            return BigDecimal.ZERO;
-        }
-    }
-
 
     @Override
     public List<CurrencyResponse> getCurrencies() {
@@ -72,6 +59,11 @@ public class CurrencyServiceImpl implements ICurrencyService {
                     return response;
                 })
                 .toList();
+    }
+
+    @Override
+    public Currency findCurrencyByCode(String code) {
+        return this.currencyRepository.findByCode(code).orElseThrow(() -> new IllegalArgumentException("Currency not found"));
     }
 
     @Override
@@ -106,5 +98,21 @@ public class CurrencyServiceImpl implements ICurrencyService {
         }
     }
 
+    /**
+     * Récupère le prix d'une devise sur Coinbase
+     *
+     * @param currencyCode code de la devise
+     * @return le prix de la devise
+     */
+    private BigDecimal getPriceFromCoinbase(String currencyCode) {
+        try {
+            String url = "https://api.coinbase.com/v2/prices/" + currencyCode + "-EUR/spot";
+            ResponseEntity<CoinbasePriceResponse> response = restTemplate.getForEntity(url, CoinbasePriceResponse.class);
+            return new BigDecimal(Objects.requireNonNull(response.getBody()).getData().getAmount());
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération du prix pour la devise " + currencyCode, e);
+            return BigDecimal.ZERO;
+        }
+    }
 
 }
