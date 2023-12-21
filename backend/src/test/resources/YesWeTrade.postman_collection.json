@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "8c7a4458-db31-45af-bcf5-0c7c0b0cb853",
+		"_postman_id": "5285bd18-7fe9-4671-aa3f-1e5571cbb16a",
 		"name": "YesWeTrade",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "28775427"
+		"_exporter_id": "19733253"
 	},
 	"item": [
 		{
@@ -146,13 +146,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL_V1}}/user/transactions",
+							"raw": "{{API_URL_V1}}/user/card-transactions",
 							"host": [
 								"{{API_URL_V1}}"
 							],
 							"path": [
 								"user",
-								"transactions"
+								"card-transactions"
 							]
 						}
 					},
