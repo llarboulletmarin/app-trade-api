@@ -136,6 +136,60 @@
 								"transactions",
 								"BTC"
 							]
+                        }
+                    },
+                  "response": []
+                },
+              {
+                "name": "deposit",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\r\n    \"cardId\": 1,\r\n    \"amount\": 100.55\r\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "{{API_URL_V1}}/user/deposit",
+                    "host": [
+                      "{{API_URL_V1}}"
+                    ],
+                    "path": [
+                      "user",
+                      "deposit"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "withdraw",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\r\n    \"cardId\": 1,\r\n    \"amount\": 10.55\r\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "{{API_URL_V1}}/user/withdraw",
+                    "host": [
+                      "{{API_URL_V1}}"
+                    ],
+                    "path": [
+                      "user",
+                      "withdraw"
+                    ]
 						}
 					},
 					"response": []

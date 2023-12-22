@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class UserService implements IUserService {
 
@@ -20,6 +22,22 @@ public class UserService implements IUserService {
     @Override
     public User getUserByEmail(String email) throws UsernameNotFoundException {
         return this.userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email + " not found"));
+    }
+
+    @Override
+    public boolean deposit(String email, BigDecimal amount) {
+        User user = this.getUserByEmail(email);
+        user.setBalance(user.getBalance().add(amount));
+        this.userRepository.save(user);
+        return true;
+    }
+
+    @Override
+    public boolean withdraw(String email, BigDecimal amount) {
+        User user = this.getUserByEmail(email);
+        user.setBalance(user.getBalance().subtract(amount));
+        this.userRepository.save(user);
+        return true;
     }
 
     @Override

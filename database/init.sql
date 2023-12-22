@@ -18,7 +18,7 @@ CREATE TABLE user (
     zip_code VARCHAR(30) NOT NULL,
     city VARCHAR(30) NOT NULL,
     country VARCHAR(30) NOT NULL,
-    balance DECIMAL(18,9) NOT NULL DEFAULT 0,
+    balance DECIMAL(18, 2) NOT NULL DEFAULT 0,
     register_date DATE NOT NULL,
     last_update_date DATE,
     fkid_role INT,

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +53,9 @@ public class User {
 
     @Column(name = "country", nullable = false, length = 30)
     private String country;
+
+    @Column(name = "balance", nullable = false)
+    private BigDecimal balance;
 
     @Column(name = "register_date", nullable = false)
     @Temporal(TemporalType.DATE)

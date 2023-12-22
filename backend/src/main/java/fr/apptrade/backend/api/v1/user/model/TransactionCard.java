@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -25,6 +26,7 @@ public class TransactionCard {
 
     @Column(name = "transaction_date", nullable = false)
     @Temporal(TemporalType.DATE)
+    @CreationTimestamp
     private Date transactionDate;
 
     @ManyToOne
