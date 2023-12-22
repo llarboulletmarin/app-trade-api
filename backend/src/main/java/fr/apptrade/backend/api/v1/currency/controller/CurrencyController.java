@@ -3,12 +3,15 @@ package fr.apptrade.backend.api.v1.currency.controller;
 import fr.apptrade.backend.api.v1.config.model.ApiResponse;
 import fr.apptrade.backend.api.v1.currency.model.response.CurrencyResponse;
 import fr.apptrade.backend.api.v1.currency.service.ICurrencyService;
+import fr.apptrade.backend.api.v1.user.model.request.TransactionRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -74,6 +77,32 @@ public class CurrencyController {
         } catch (Exception e) {
             logger.error("Error while getting currency history", e);
             return ResponseEntity.badRequest().body(new ApiResponse("Error while getting currency history", 404, e.getMessage(), null, Instant.now()));
+        }
+    }
+
+    /**
+     * Endpoint permettant d'acheter une devise
+     *
+     * @param currencyCode : code de la devise
+     * @param buyRequest   : montant à acheter
+     * @param email        : email de l'utilisateur connecté
+     * @return : montant acheté
+     */
+    @PostMapping("/{currencyCode}/buy")
+    public ResponseEntity<?> buyCurrency(@PathVariable String currencyCode,
+                                         @RequestBody TransactionRequest buyRequest,
+                                         @CurrentSecurityContext(expression = "authentication.name") String email) {
+        logger.info("buyCurrency({}, currencyCode: {}, buyRequest: {})", email, currencyCode, buyRequest);
+
+        try {
+            if (BigDecimal.ZERO.compareTo(buyRequest.getAmount()) >= 0) {
+                throw new RuntimeException("Amount must be greater than 0");
+            }
+
+            return ResponseEntity.ok(this.currencyService.buyCurrency(email, currencyCode, buyRequest));
+        } catch (Exception e) {
+            logger.error("buyCurrency({}, currencyCode: {}, buyRequest: {}, exception: {})", email, currencyCode, buyRequest, e.getMessage());
+            return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), 400, "Bad Request", e.getLocalizedMessage(), Instant.now()));
         }
     }
 }

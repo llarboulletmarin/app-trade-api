@@ -8,6 +8,9 @@ import fr.apptrade.backend.api.v1.currency.model.response.CoinbasePriceResponse;
 import fr.apptrade.backend.api.v1.currency.model.response.CurrencyResponse;
 import fr.apptrade.backend.api.v1.currency.repository.ICurrencyRepository;
 import fr.apptrade.backend.api.v1.currency.service.ICurrencyService;
+import fr.apptrade.backend.api.v1.user.model.request.TransactionRequest;
+import fr.apptrade.backend.api.v1.user.model.response.TransactionResponse;
+import fr.apptrade.backend.api.v1.user.service.impl.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,10 +33,14 @@ public class CurrencyService implements ICurrencyService {
 
     private final RestTemplate restTemplate;
 
+    private final TransactionService transactionService;
+
     @Autowired
-    public CurrencyService(ICurrencyRepository currencyRepository) {
+    public CurrencyService(ICurrencyRepository currencyRepository,
+                           TransactionService transactionService) {
         this.currencyRepository = currencyRepository;
         this.restTemplate = new RestTemplate();
+        this.transactionService = transactionService;
     }
 
     @Override
@@ -96,6 +104,17 @@ public class CurrencyService implements ICurrencyService {
         } catch (Exception e) {
             throw new Exception("Currency with code " + code + " not found");
         }
+    }
+
+    @Override
+    public TransactionResponse buyCurrency(String email, String currencyCode, TransactionRequest buyRequest) throws Exception {
+        Currency currency = this.findCurrencyByCode(currencyCode);
+
+
+        BigDecimal price = getPriceFromCoinbase(currencyCode);
+        BigDecimal quantity = buyRequest.getAmount().divide(price, 8, RoundingMode.HALF_UP);
+
+        return this.transactionService.addBuyTransaction(email, currency, quantity, price);
     }
 
     /**

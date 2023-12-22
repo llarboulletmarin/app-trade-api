@@ -52,6 +52,10 @@ public class TransactionCardService implements ITransactionCardService {
     public TransactionCardResponse withdraw(String email, TransactionCardRequest withdrawRequest) {
         User user = this.userService.getUserByEmail(email);
 
+        if (user.getBalance().compareTo(withdrawRequest.getAmount()) < 0) {
+            throw new RuntimeException("Not enough money");
+        }
+
         TransactionCard transactionCard = new TransactionCard();
         transactionCard.setFkidUser(user.getId());
         transactionCard.setAmount(withdrawRequest.getAmount().negate());

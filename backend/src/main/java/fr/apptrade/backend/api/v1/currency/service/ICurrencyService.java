@@ -3,6 +3,8 @@ package fr.apptrade.backend.api.v1.currency.service;
 import fr.apptrade.backend.api.v1.currency.model.Currency;
 import fr.apptrade.backend.api.v1.currency.model.candle.CandleResponseList;
 import fr.apptrade.backend.api.v1.currency.model.response.CurrencyResponse;
+import fr.apptrade.backend.api.v1.user.model.request.TransactionRequest;
+import fr.apptrade.backend.api.v1.user.model.response.TransactionResponse;
 
 import java.util.List;
 
@@ -40,4 +42,15 @@ public interface ICurrencyService {
      */
     CandleResponseList getCurrencyHistoryByCode(String code, Integer days) throws Exception;
 
+
+    /**
+     * Endpoint d'achat d'une devise
+     *
+     * @param email        : email de l'utilisateur connecté
+     * @param currencyCode : code de la devise
+     * @param buyRequest   : montant à acheter (en euros)
+     * @return la transaction
+     * @throws Exception : exception
+     */
+    TransactionResponse buyCurrency(String email, String currencyCode, TransactionRequest buyRequest) throws Exception;
 }
