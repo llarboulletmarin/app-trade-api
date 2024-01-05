@@ -3,7 +3,7 @@ version: '3.1'
 services:
   database:
     image: mariadb
-    restart: always
+    container_name: apptrade-database
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_USER: ${MYSQL_USER}
@@ -15,5 +15,14 @@ services:
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - db-data:/var/lib/mysql
 
+  backend:
+    container_name: apptrade-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+        - database
 volumes:
     db-data:
