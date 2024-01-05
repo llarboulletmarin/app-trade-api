@@ -47,9 +47,35 @@ CREATE TABLE currency (
     name VARCHAR(255) NOT NULL,
     code VARCHAR(30) NOT NULL
 );
-INSERT INTO currency (name, code) VALUES ('Bitcoin', 'BTC'),
-                                         ('Ethereum', 'ETH'),
-                                         ('Litecoin', 'LTC');
+INSERT INTO currency (name, code) VALUES
+                                      ('Bitcoin', 'BTC'),
+                                      ('Ethereum 2', 'ETH2'),
+                                      ('BNB', 'BNB'),
+                                      ('XRP', 'XRP'),
+                                      ('Avalanche', 'AVAX'),
+                                      ('Polkadot', 'DOT'),
+                                      ('Wrapped TRON', 'WTRX'),
+                                      ('Polygon', 'MATIC'),
+                                      ('Wrapped Bitcoin', 'WBTC'),
+                                      ('SHIBA INU', 'SHIB'),
+                                      ('Wrapped EOS', 'WEOS'),
+                                      ('Bitcoin Cash', 'BCH'),
+                                      ('Uniswap', 'UNI'),
+                                      ('Ethereum', 'ETH'),
+                                      ('Tether', 'USDT'),
+                                      ('Solana', 'SOL'),
+                                      ('USD Coin', 'USDC'),
+                                      ('Cardano', 'ADA'),
+                                      ('Dogecoin', 'DOGE'),
+                                      ('TRON', 'TRX'),
+                                      ('Chainlink', 'LINK'),
+                                      ('Toncoin', 'TON'),
+                                      ('Internet Computer', 'ICP'),
+                                      ('Dai', 'DAI'),
+                                      ('Litecoin', 'LTC'),
+                                      ('Cosmos', 'ATOM'),
+                                      ('NEAR Protocol', 'NEAR');
+
 
 CREATE TABLE transac (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,

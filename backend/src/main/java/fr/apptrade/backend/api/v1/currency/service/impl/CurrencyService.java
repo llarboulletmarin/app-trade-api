@@ -24,6 +24,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Service
 public class CurrencyService implements ICurrencyService {
@@ -46,14 +48,19 @@ public class CurrencyService implements ICurrencyService {
     @Override
     public List<CurrencyResponse> getCurrencies() {
         logger.debug("getCurrency()");
-        return this.currencyRepository.findAll()
-                .stream()
-                .map(currency -> {
+
+        List<Currency> currencies = this.currencyRepository.findAll();
+        List<CompletableFuture<CurrencyResponse>> futures = currencies.stream()
+                .map(currency -> CompletableFuture.supplyAsync(() -> {
                     CurrencyResponse response = new CurrencyResponse(currency);
                     response.setPrice(getPriceFromCoinbase(currency.getCode()));
                     return response;
-                })
+                }))
                 .toList();
+
+        return futures.stream()
+                .map(CompletableFuture::join)
+                .collect(Collectors.toList());
     }
 
     @Override
