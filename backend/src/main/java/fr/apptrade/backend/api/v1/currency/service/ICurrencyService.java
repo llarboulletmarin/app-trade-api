@@ -53,4 +53,15 @@ public interface ICurrencyService {
      * @throws Exception : exception
      */
     TransactionResponse buyCurrency(String email, String currencyCode, TransactionRequest buyRequest) throws Exception;
+
+    /**
+     * Endpoint d'achat d'une devise
+     *
+     * @param email        : email de l'utilisateur connecté
+     * @param currencyCode : code de la devise
+     * @param buyRequest   : montant à acheter (en euros)
+     * @return la transaction
+     * @throws Exception : exception
+     */
+    TransactionResponse sellCurrency(String email, String currencyCode, TransactionRequest sellRequest) throws Exception;
 }

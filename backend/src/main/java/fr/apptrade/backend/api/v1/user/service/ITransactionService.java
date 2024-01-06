@@ -34,4 +34,16 @@ public interface ITransactionService {
      * @return : transaction
      */
     TransactionResponse addBuyTransaction(String email, Currency code, BigDecimal amount, BigDecimal price) throws Exception;
+
+
+    /**
+     * Permet d'enregistrer une nouvelle transaction pour un utilisateur (achat)
+     *
+     * @param email  : email de l'utilisateur
+     * @param code   : devise
+     * @param amount : montant de la transaction (en devise, ex: 0.5 BTC)
+     * @param price  : prix de la devise (en euros, au moment de l'achat
+     * @return : transaction
+     */
+    TransactionResponse addSellTransaction(String email, Currency code, BigDecimal amount, BigDecimal price) throws Exception;
 }

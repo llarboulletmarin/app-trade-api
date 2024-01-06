@@ -352,33 +352,61 @@
 					},
                   "response": []
                 },
-              {
-                "name": "buy",
-                "request": {
-                  "method": "POST",
-                  "header": [],
-                  "body": {
-                    "mode": "raw",
-                    "raw": "{\r\n    \"amount\": 5\r\n}",
-                    "options": {
-                      "raw": {
-                        "language": "json"
-                      }
-                    }
-                  },
-                  "url": {
-                    "raw": "{{API_URL_V1}}/currencies/ETH/buy",
-                    "host": [
-                      "{{API_URL_V1}}"
-                    ],
-                    "path": [
-                      "currencies",
-                      "ETH",
-                      "buy"
-                    ]
-                  }
-                },
+              	{
+					"name": "buy",
+					"request": {
+					  "method": "POST",
+					  "header": [],
+					  "body": {
+						"mode": "raw",
+						"raw": "{\r\n    \"amount\": 5\r\n}",
+						"options": {
+						  "raw": {
+							"language": "json"
+						  }
+						}
+					  },
+					  "url": {
+						"raw": "{{API_URL_V1}}/currencies/ETH/buy",
+						"host": [
+						  "{{API_URL_V1}}"
+						],
+						"path": [
+						  "currencies",
+						  "ETH",
+						  "buy"
+						]
+					  }
+					},
 					"response": []
+				},
+				{
+					"name": "sell",
+					"request": {
+					  "method": "POST",
+					  "header": [],
+					  "body": {
+						"mode": "raw",
+						"raw": "{\r\n    \"amount\": 5\r\n}",
+						"options": {
+						  "raw": {
+							"language": "json"
+						  }
+						}
+					  },
+					  "url": {
+						"raw": "{{API_URL_V1}}/currencies/ETH/sell",
+						"host": [
+						  "{{API_URL_V1}}"
+						],
+						"path": [
+						  "currencies",
+						  "ETH",
+						  "sell"
+						]
+					  }
+					},
+						"response": []
 				}
 			]
 		}

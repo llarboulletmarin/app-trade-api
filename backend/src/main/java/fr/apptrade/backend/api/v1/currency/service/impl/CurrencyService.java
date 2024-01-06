@@ -134,4 +134,18 @@ public class CurrencyService implements ICurrencyService {
         }
     }
 
+    @Override
+    public TransactionResponse sellCurrency(String email, String currencyCode, TransactionRequest sellRequest)
+            throws Exception {
+
+        Currency currency = this.findCurrencyByCode(currencyCode);
+
+        BigDecimal price = getPriceFromCoinbase(currencyCode);
+
+        BigDecimal quantity = sellRequest.getAmount().divide(price, 8, RoundingMode.HALF_UP);
+
+        return this.transactionService.addSellTransaction(email, currency, quantity, price);
+
+    }
+
 }

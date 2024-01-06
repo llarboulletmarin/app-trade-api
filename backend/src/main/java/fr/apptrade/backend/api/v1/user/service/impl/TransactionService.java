@@ -63,4 +63,19 @@ public class TransactionService implements ITransactionService {
         return new TransactionResponse(this.transactionRepository.save(transaction));
     }
 
+    @Override
+    public TransactionResponse addSellTransaction(String email, Currency currency, BigDecimal amount, BigDecimal price)
+            throws Exception {
+        User user = this.userService.getUserByEmail(email);
+
+        Transaction transaction = new Transaction();
+        transaction.setFkidUser(user.getId());
+        transaction.setCurrency(currency);
+        transaction.setAmount(amount);
+        transaction.setValue(price);
+
+        this.userService.deposit(email, amount.multiply(price));
+        return new TransactionResponse(this.transactionRepository.save(transaction));
+    }
+
 }

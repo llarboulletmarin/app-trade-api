@@ -105,4 +105,30 @@ public class CurrencyController {
             return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), 400, "Bad Request", e.getLocalizedMessage(), Instant.now()));
         }
     }
+
+        /**
+     * Endpoint permettant d'acheter une devise
+     *
+     * @param currencyCode : code de la devise
+     * @param sellRequest   : montant à acheter
+     * @param email        : email de l'utilisateur connecté
+     * @return : montant acheté
+     */
+    @PostMapping("/{currencyCode}/sell")
+    public ResponseEntity<?> sellCurrency(@PathVariable String currencyCode,
+                                         @RequestBody TransactionRequest sellRequest,
+                                         @CurrentSecurityContext(expression = "authentication.name") String email) {
+        logger.info("sellCurrency({}, currencyCode: {}, sellRequest: {})", email, currencyCode, sellRequest);
+
+        try {
+            if (BigDecimal.ZERO.compareTo(sellRequest.getAmount()) >= 0) {
+                throw new RuntimeException("Amount must be greater than 0");
+            }
+
+            return ResponseEntity.ok(this.currencyService.sellCurrency(email, currencyCode, sellRequest));
+        } catch (Exception e) {
+            logger.error("sellCurrency({}, currencyCode: {}, sellRequest: {}, exception: {})", email, currencyCode, sellRequest, e.getMessage());
+            return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), 400, "Bad Request", e.getLocalizedMessage(), Instant.now()));
+        }
+    }
 }
