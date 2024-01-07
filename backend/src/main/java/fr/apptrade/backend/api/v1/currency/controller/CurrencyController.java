@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.List;
 
 @RestController
 @RequestMapping("${api.base-url.v1}/currencies")
@@ -48,12 +47,12 @@ public class CurrencyController {
     public ResponseEntity<?> getCurrencyByCode(@PathVariable String currencyCode) {
         logger.info("getCurrencyById({})", currencyCode);
 
-        List<CurrencyResponse> currencies = this.currencyService.getCurrencyByCode(currencyCode);
-        if (currencies.isEmpty()) {
+        CurrencyResponse currency = this.currencyService.getCurrencyByCode(currencyCode);
+        if (currency == null) {
             return ResponseEntity.badRequest().body(new ApiResponse("Error while getting currency", 404, "Currency with code " + currencyCode + " not found", null, Instant.now()));
         }
 
-        return ResponseEntity.ok(currencies);
+        return ResponseEntity.ok(currency);
     }
 
     /**
@@ -102,6 +101,32 @@ public class CurrencyController {
             return ResponseEntity.ok(this.currencyService.buyCurrency(email, currencyCode, buyRequest));
         } catch (Exception e) {
             logger.error("buyCurrency({}, currencyCode: {}, buyRequest: {}, exception: {})", email, currencyCode, buyRequest, e.getMessage());
+            return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), 400, "Bad Request", e.getLocalizedMessage(), Instant.now()));
+        }
+    }
+
+    /**
+     * Endpoint permettant de vendre une devise
+     *
+     * @param currencyCode : code de la devise
+     * @param sellRequest   : montant à vendre
+     * @param email        : email de l'utilisateur connecté
+     * @return : montant vendu
+     */
+    @PostMapping("/{currencyCode}/sell")
+    public ResponseEntity<?> sellCurrency(@PathVariable String currencyCode,
+                                         @RequestBody TransactionRequest sellRequest,
+                                         @CurrentSecurityContext(expression = "authentication.name") String email) {
+        logger.info("sellCurrency({}, currencyCode: {}, sellRequest: {})", email, currencyCode, sellRequest);
+
+        try {
+            if (BigDecimal.ZERO.compareTo(sellRequest.getAmount()) >= 0) {
+                throw new RuntimeException("Amount must be greater than 0");
+            }
+
+            return ResponseEntity.ok(this.currencyService.sellCurrency(email, currencyCode, sellRequest));
+        } catch (Exception e) {
+            logger.error("sellCurrency({}, currencyCode: {}, sellRequest: {}, exception: {})", email, currencyCode, sellRequest, e.getMessage());
             return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), 400, "Bad Request", e.getLocalizedMessage(), Instant.now()));
         }
     }

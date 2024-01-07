@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -64,16 +63,11 @@ public class CurrencyService implements ICurrencyService {
     }
 
     @Override
-    public List<CurrencyResponse> getCurrencyByCode(String code) {
+    public CurrencyResponse getCurrencyByCode(String code) {
         logger.debug("getCurrencyByCode({})", code);
         return this.currencyRepository.findByCode(code)
-                .stream()
-                .map(currency -> {
-                    CurrencyResponse response = new CurrencyResponse(currency);
-                    response.setPrice(getPriceFromCoinbase(currency.getCode()));
-                    return response;
-                })
-                .toList();
+                .map(CurrencyResponse::new)
+                .orElseThrow(() -> new IllegalArgumentException("Currency not found"));
     }
 
     @Override
@@ -87,7 +81,7 @@ public class CurrencyService implements ICurrencyService {
         String startTimestamp = String.valueOf(currentTime - days * 24 * 60 * 60);
 
         try {
-
+            // récupère les données brutes de Coinbase
             ResponseEntity<List<List<Object>>> response = restTemplate.exchange(
                     "https://api.pro.coinbase.com/products/" + code + "-EUR/candles?start=" + startTimestamp + "&end=" + currentTime + "&granularity=3600",
                     HttpMethod.GET,
@@ -95,12 +89,12 @@ public class CurrencyService implements ICurrencyService {
                     new ParameterizedTypeReference<>() {
                     }
             );
-
             List<List<Object>> rawData = response.getBody();
             if (rawData == null) {
                 return null;
             }
 
+            // transforme les données brutes en liste de CandleResponse
             List<CandleResponse> candleResponseList = rawData.stream()
                     .map(Candle::new)
                     .map(CandleResponse::new)
@@ -115,13 +109,21 @@ public class CurrencyService implements ICurrencyService {
 
     @Override
     public TransactionResponse buyCurrency(String email, String currencyCode, TransactionRequest buyRequest) throws Exception {
+        // récupère la devise et le prix
         Currency currency = this.findCurrencyByCode(currencyCode);
-
-
         BigDecimal price = getPriceFromCoinbase(currencyCode);
-        BigDecimal quantity = buyRequest.getAmount().divide(price, 8, RoundingMode.HALF_UP);
 
-        return this.transactionService.addBuyTransaction(email, currency, quantity, price);
+        return this.transactionService.addBuyTransaction(email, currency, buyRequest, price);
+    }
+
+    @Override
+    public TransactionResponse sellCurrency(String email, String currencyCode, TransactionRequest sellRequest)
+            throws Exception {
+        // récupère la devise et le prix
+        Currency currency = this.findCurrencyByCode(currencyCode);
+        BigDecimal price = getPriceFromCoinbase(currencyCode);
+
+        return this.transactionService.addSellTransaction(email, currency, sellRequest, price);
     }
 
     /**

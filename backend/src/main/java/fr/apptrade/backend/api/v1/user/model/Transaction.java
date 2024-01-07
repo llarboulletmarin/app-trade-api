@@ -27,10 +27,10 @@ public class Transaction {
     @Column(name = "fkid_user", nullable = false)
     private Integer fkidUser;
 
-    @Column(name = "amount", nullable = false)
+    @Column(name = "amount", nullable = false, precision = 18, scale = 9)
     private BigDecimal amount;
 
-    @Column(name = "value", nullable = false)
+    @Column(name = "value", nullable = false, precision = 18, scale = 9)
     private BigDecimal value;
 
     @Column(name = "transaction_date", nullable = false)

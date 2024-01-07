@@ -18,12 +18,12 @@ public interface ICurrencyService {
     List<CurrencyResponse> getCurrencies();
 
     /**
-     * Retourne des devises par leurs codes
+     * Retourne une devise par son code
      *
      * @param code : code de la devise
-     * @return la liste des devises
+     * @return une devise
      */
-    List<CurrencyResponse> getCurrencyByCode(String code);
+    CurrencyResponse getCurrencyByCode(String code);
 
     /**
      * Retourne lune devise par son code
@@ -53,4 +53,15 @@ public interface ICurrencyService {
      * @throws Exception : exception
      */
     TransactionResponse buyCurrency(String email, String currencyCode, TransactionRequest buyRequest) throws Exception;
+
+    /**
+     * Endpoint de vente d'une devise
+     *
+     * @param email        : email de l'utilisateur connecté
+     * @param currencyCode : code de la devise
+     * @param sellRequest   : montant à vendre (en euros)
+     * @return la transaction
+     * @throws Exception : exception
+     */
+    TransactionResponse sellCurrency(String email, String currencyCode, TransactionRequest sellRequest) throws Exception;
 }
