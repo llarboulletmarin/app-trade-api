@@ -3,9 +3,9 @@ spring:
     restart:
       enabled: true
   datasource:
-    url: jdbc:mariadb://localhost:3306/app_trade_db
-    username: user
-    password: 12345678
+    url: ${datasource_url:jdbc:mariadb://localhost:3306/app_trade_db}
+    username: ${datasource_username:user}
+    password: ${datasource_password:12345678}
   banner:
     location: classpath:custom-banner.txt
 
@@ -15,7 +15,7 @@ spring:
     show-sql: false
 
 server:
-  port: 8080
+  port: ${server_port:8080}
 
 api:
   base-url:
