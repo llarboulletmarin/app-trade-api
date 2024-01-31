@@ -46,8 +46,6 @@ public class CurrencyService implements ICurrencyService {
 
     @Override
     public List<CurrencyResponse> getCurrencies() {
-        logger.debug("getCurrency()");
-
         List<Currency> currencies = this.currencyRepository.findAll();
         List<CompletableFuture<CurrencyResponse>> futures = currencies.stream()
                 .map(currency -> CompletableFuture.supplyAsync(() -> {
@@ -56,7 +54,6 @@ public class CurrencyService implements ICurrencyService {
                     return response;
                 }))
                 .toList();
-
         return futures.stream()
                 .map(CompletableFuture::join)
                 .collect(Collectors.toList());
@@ -66,7 +63,11 @@ public class CurrencyService implements ICurrencyService {
     public CurrencyResponse getCurrencyByCode(String code) {
         logger.debug("getCurrencyByCode({})", code);
         return this.currencyRepository.findByCode(code)
-                .map(CurrencyResponse::new)
+                .map(currency -> {
+                    CurrencyResponse response = new CurrencyResponse(currency);
+                    response.setPrice(getPriceFromCoinbase(currency.getCode()));
+                    return response;
+                })
                 .orElseThrow(() -> new IllegalArgumentException("Currency not found"));
     }
 
