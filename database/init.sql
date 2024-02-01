@@ -87,9 +87,11 @@ CREATE TABLE transac (
 );
 INSERT INTO transac (fkid_currency, fkid_user, amount, value, transaction_date)
 VALUES
-    ((SELECT id FROM currency WHERE code = 'BTC'), (SELECT id FROM user WHERE email = 'example@example.com'), 0.001, 35000.123456789, CURDATE()),
-    ((SELECT id FROM currency WHERE code = 'ETH'), (SELECT id FROM user WHERE email = 'example@example.com'), 2.000, 2500.987654321, CURDATE());
-
+    ((SELECT id FROM currency WHERE code = 'BTC'), (SELECT id FROM user WHERE email = 'example@example.com'), 0.01, 35000.123456789, CURDATE()),
+    ((SELECT id FROM currency WHERE code = 'ETH'), (SELECT id FROM user WHERE email = 'example@example.com'), 2.000, 2500.987654321, CURDATE()),
+    ((SELECT id FROM currency WHERE code = 'BTC'), (SELECT id FROM user WHERE email = 'example@example.com'), 2.000, 35000.123456789, CURDATE()),
+    ((SELECT id FROM currency WHERE code = 'ETH'), (SELECT id FROM user WHERE email = 'example@example.com'), 3.000,
+        2488.987654321, CURDATE());
 
 CREATE TABLE credit_card (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
