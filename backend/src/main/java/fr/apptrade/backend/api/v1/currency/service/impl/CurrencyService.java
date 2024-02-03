@@ -84,7 +84,7 @@ public class CurrencyService implements ICurrencyService {
         try {
             // récupère les données brutes de Coinbase
             ResponseEntity<List<List<Object>>> response = restTemplate.exchange(
-                    "https://api.pro.coinbase.com/products/" + code + "-EUR/candles?start=" + startTimestamp + "&end=" + currentTime + "&granularity=3600",
+                    "https://api.pro.coinbase.com/products/" + code + "-USD/candles?start=" + startTimestamp + "&end=" + currentTime + "&granularity=3600",
                     HttpMethod.GET,
                     null,
                     new ParameterizedTypeReference<>() {
@@ -135,7 +135,7 @@ public class CurrencyService implements ICurrencyService {
      */
     private BigDecimal getPriceFromCoinbase(String currencyCode) {
         try {
-            String url = "https://api.coinbase.com/v2/prices/" + currencyCode + "-EUR/spot";
+            String url = "https://api.coinbase.com/v2/prices/" + currencyCode + "-USD/spot";
             ResponseEntity<CoinbasePriceResponse> response = restTemplate.getForEntity(url, CoinbasePriceResponse.class);
             return new BigDecimal(Objects.requireNonNull(response.getBody()).getData().getAmount());
         } catch (Exception e) {
